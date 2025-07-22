@@ -1,0 +1,14 @@
+{
+    "estrogen": {
+        "data_count": 6,
+        "last_trained": "2025-07-02 12:56:01"
+    },
+    "cortisol": {
+        "data_count": 6,
+        "last_trained": "2025-07-02 12:56:01"
+    },
+    "immunity": {
+        "data_count": 6,
+        "last_trained": "2025-07-02 12:56:01"
+    }
+}

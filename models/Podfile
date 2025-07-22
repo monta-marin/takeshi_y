@@ -1,0 +1,12 @@
+platform :ios, '12.0'  # 最低限サポートするiOSバージョンを設定
+
+workspace 'takeshi_y.xcworkspace'  # 使用するワークスペース名を指定
+project 'takeshi_y.xcodeproj'      # 使用するXcodeプロジェクトファイルを指定
+
+target 'takeshi_y' do
+  use_frameworks!  # フレームワークとして動的リンクを使用する設定
+
+  pod 'Alamofire', '~> 5.8.0'  # Alamofireのバージョンを指定
+end
+
+

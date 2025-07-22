@@ -1,0 +1,12 @@
+platform :ios, '12.0'  # iOSの最小バージョンを12.0以上に設定
+
+workspace 'takeshi_y.xcworkspace'  # ワークスペースの名前を指定
+project 'takeshi_y.xcodeproj'  # プロジェクトの名前を指定
+
+target 'takeshi_y' do
+  use_frameworks!
+
+  # Alamofireの依存関係を追加（他の依存関係もここに追加可能）
+  pod 'Alamofire', '~> 5.0'
+end
+

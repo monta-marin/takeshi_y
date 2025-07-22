@@ -1,0 +1,26 @@
+{
+    "train": [
+        "age",
+        "height",
+        "weight",
+        "body_fat",
+        "heart_rate",
+        "steps",
+        "sleep_duration",
+        "body_temperature",
+        "exercise_kcal",
+        "blood_pressure_systolic",
+        "blood_pressure_diastolic"
+    ],
+    "predict": [
+        "age",
+        "height",
+        "weight",
+        "body_fat",
+        "heart_rate",
+        "steps",
+        "sleep_duration",
+        "body_temperature",
+        "exercise_kcal"
+    ]
+}

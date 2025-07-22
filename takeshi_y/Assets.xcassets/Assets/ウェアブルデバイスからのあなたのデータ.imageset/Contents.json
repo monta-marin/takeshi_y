@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "ウェアブルデバイスからの 測定データ.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "ウェアブルデバイスからの 測定データ@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "ウェアブルデバイスからの 測定データ@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

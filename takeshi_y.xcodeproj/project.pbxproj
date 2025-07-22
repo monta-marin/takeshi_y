@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXContainerItemProxy section */
@@ -27,24 +27,32 @@
 		DF53F7542D6091FB00FFAD31 /* takeshi_y.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = takeshi_y.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF53F7642D6091FD00FFAD31 /* takeshi_yTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = takeshi_yTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF53F76E2D6091FD00FFAD31 /* takeshi_yUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = takeshi_yUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF53F8332D61457C00FFAD31 /* takeshi_y.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = takeshi_y.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		DF53F7902D6092D500FFAD31 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PreviewContent/CortisolAnalysisView.swift,
+			);
+			target = DF53F76D2D6091FD00FFAD31 /* takeshi_yUITests */;
+		};
+		DF69CC6A2D740E6400764E25 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			platformFiltersByRelativePath = {
+				PreviewContent/MeasurementDataManager.swift = (
+					ios,
+				);
+			};
+			target = DF53F7532D6091FB00FFAD31 /* takeshi_y */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		DF53F7562D6091FB00FFAD31 /* takeshi_y */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = takeshi_y;
-			sourceTree = "<group>";
-		};
-		DF53F7672D6091FD00FFAD31 /* takeshi_yTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = takeshi_yTests;
-			sourceTree = "<group>";
-		};
-		DF53F7712D6091FD00FFAD31 /* takeshi_yUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = takeshi_yUITests;
-			sourceTree = "<group>";
-		};
+		DF53F7562D6091FB00FFAD31 /* takeshi_y */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (DF69CC6A2D740E6400764E25 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, DF53F7902D6092D500FFAD31 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = takeshi_y; sourceTree = "<group>"; };
+		DF53F7672D6091FD00FFAD31 /* takeshi_yTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = takeshi_yTests; sourceTree = "<group>"; };
+		DF53F7712D6091FD00FFAD31 /* takeshi_yUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = takeshi_yUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +80,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		76F303B97C7564958340135C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		DF53F74B2D6091FB00FFAD31 = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +94,7 @@
 				DF53F7672D6091FD00FFAD31 /* takeshi_yTests */,
 				DF53F7712D6091FD00FFAD31 /* takeshi_yUITests */,
 				DF53F7552D6091FB00FFAD31 /* Products */,
+				76F303B97C7564958340135C /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,6 +104,13 @@
 				DF53F7542D6091FB00FFAD31 /* takeshi_y.app */,
 				DF53F7642D6091FD00FFAD31 /* takeshi_yTests.xctest */,
 				DF53F76E2D6091FD00FFAD31 /* takeshi_yUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DF53F8342D61457C00FFAD31 /* Products */ = {
+			isa = PBXGroup;
+			children = (
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -111,8 +134,6 @@
 				DF53F7562D6091FB00FFAD31 /* takeshi_y */,
 			);
 			name = takeshi_y;
-			packageProductDependencies = (
-			);
 			productName = takeshi_y;
 			productReference = DF53F7542D6091FB00FFAD31 /* takeshi_y.app */;
 			productType = "com.apple.product-type.application";
@@ -134,8 +155,6 @@
 				DF53F7672D6091FD00FFAD31 /* takeshi_yTests */,
 			);
 			name = takeshi_yTests;
-			packageProductDependencies = (
-			);
 			productName = takeshi_yTests;
 			productReference = DF53F7642D6091FD00FFAD31 /* takeshi_yTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +176,6 @@
 				DF53F7712D6091FD00FFAD31 /* takeshi_yUITests */,
 			);
 			name = takeshi_yUITests;
-			packageProductDependencies = (
-			);
 			productName = takeshi_yUITests;
 			productReference = DF53F76E2D6091FD00FFAD31 /* takeshi_yUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -171,7 +188,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					DF53F7532D6091FB00FFAD31 = {
 						CreatedOnToolsVersion = 16.2;
@@ -187,6 +204,7 @@
 				};
 			};
 			buildConfigurationList = DF53F74F2D6091FB00FFAD31 /* Build configuration list for PBXProject "takeshi_y" */;
+			compatibilityVersion = "Xcode 15.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -195,9 +213,14 @@
 			);
 			mainGroup = DF53F74B2D6091FB00FFAD31;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = DF53F7552D6091FB00FFAD31 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = DF53F8342D61457C00FFAD31 /* Products */;
+					ProjectRef = DF53F8332D61457C00FFAD31 /* takeshi_y.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				DF53F7532D6091FB00FFAD31 /* takeshi_y */,
@@ -304,6 +327,8 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = Content;
+				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -329,6 +354,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -367,6 +393,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -384,6 +411,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -395,20 +423,30 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"takeshi_y/Preview Content\"";
+				Content = "";
+				"DEPLOYMENT_LOCATION[sdk=*]" = NO;
+				DEVELOPMENT_ASSET_PATHS = "Content \"/Users/yamasakitakeshi/Desktop/takeshi_y/Content\"";
 				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "takeshi-y-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
+				NEW_SETTING1 = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "yamasaki-takeshi.takeshi-y";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -424,20 +462,29 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"takeshi_y/Preview Content\"";
+				Content = "";
+				DEVELOPMENT_ASSET_PATHS = "Content \"/Users/yamasakitakeshi/Desktop/takeshi_y/Content\"";
 				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "takeshi-y-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
+				NEW_SETTING1 = "";
 				PRODUCT_BUNDLE_IDENTIFIER = "yamasaki-takeshi.takeshi-y";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -452,9 +499,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "yamasaki-takeshi.takeshi-yTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -471,9 +519,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "yamasaki-takeshi.takeshi-yTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -489,8 +538,8 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "yamasaki-takeshi.takeshi-yUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -506,8 +555,8 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "yamasaki-takeshi.takeshi-yUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";

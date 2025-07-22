@@ -1,0 +1,405 @@
+{
+    "Immunity Data": [
+        {
+            "age": 10,
+            "WBC": 5.5,
+            "CRP": 0.1,
+            "Hemoglobin": 12.0,
+            "Blood Glucose": 85,
+            "Body Temperature": 36.6,
+            "Immunity Score": 90
+        },
+        {
+            "age": 12,
+            "WBC": 6.0,
+            "CRP": 0.1,
+            "Hemoglobin": 12.2,
+            "Blood Glucose": 88,
+            "Body Temperature": 36.7,
+            "Immunity Score": 88
+        },
+        {
+            "age": 14,
+            "WBC": 6.2,
+            "CRP": 0.2,
+            "Hemoglobin": 12.5,
+            "Blood Glucose": 90,
+            "Body Temperature": 36.8,
+            "Immunity Score": 87
+        },
+        {
+            "age": 16,
+            "WBC": 6.3,
+            "CRP": 0.2,
+            "Hemoglobin": 12.8,
+            "Blood Glucose": 92,
+            "Body Temperature": 36.9,
+            "Immunity Score": 85
+        },
+        {
+            "age": 18,
+            "WBC": 6.5,
+            "CRP": 0.2,
+            "Hemoglobin": 13.0,
+            "Blood Glucose": 95,
+            "Body Temperature": 36.9,
+            "Immunity Score": 82
+        },
+        {
+            "age": 20,
+            "WBC": 6.0,
+            "CRP": 0.1,
+            "Hemoglobin": 13.0,
+            "Blood Glucose": 93,
+            "Body Temperature": 36.7,
+            "Immunity Score": 80
+        },
+        {
+            "age": 25,
+            "WBC": 6.2,
+            "CRP": 0.1,
+            "Hemoglobin": 13.5,
+            "Blood Glucose": 90,
+            "Body Temperature": 36.8,
+            "Immunity Score": 78
+        },
+        {
+            "age": 30,
+            "WBC": 5.8,
+            "CRP": 0.1,
+            "Hemoglobin": 12.5,
+            "Blood Glucose": 90,
+            "Body Temperature": 36.9,
+            "Immunity Score": 85
+        },
+        {
+            "age": 35,
+            "WBC": 6.3,
+            "CRP": 0.3,
+            "Hemoglobin": 13.2,
+            "Blood Glucose": 92,
+            "Body Temperature": 36.8,
+            "Immunity Score": 80
+        },
+        {
+            "age": 40,
+            "WBC": 6.5,
+            "CRP": 0.3,
+            "Hemoglobin": 13.5,
+            "Blood Glucose": 93,
+            "Body Temperature": 36.7,
+            "Immunity Score": 75
+        },
+        {
+            "age": 50,
+            "WBC": 6.2,
+            "CRP": 0.5,
+            "Hemoglobin": 13.8,
+            "Blood Glucose": 92,
+            "Body Temperature": 37.0,
+            "Immunity Score": 70
+        },
+        {
+            "age": 55,
+            "WBC": 6.0,
+            "CRP": 0.4,
+            "Hemoglobin": 13.0,
+            "Blood Glucose": 95,
+            "Body Temperature": 36.9,
+            "Immunity Score": 65
+        },
+        {
+            "age": 60,
+            "WBC": 7.0,
+            "CRP": 0.3,
+            "Hemoglobin": 14.0,
+            "Blood Glucose": 88,
+            "Body Temperature": 36.6,
+            "Immunity Score": 75
+        }
+    ],
+    "Estrogen Data": [
+        {
+            "age": 10,
+            "Estrogen": 10,
+            "Menstrual Cycle": 1
+        },
+        {
+            "age": 12,
+            "Estrogen": 25,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 14,
+            "Estrogen": 50,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 16,
+            "Estrogen": 100,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 18,
+            "Estrogen": 150,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 20,
+            "Estrogen": 100,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 25,
+            "Estrogen": 80,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 30,
+            "Estrogen": 75,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 35,
+            "Estrogen": 60,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 40,
+            "Estrogen": 45,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 50,
+            "Estrogen": 30,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 55,
+            "Estrogen": 25,
+            "Menstrual Cycle": 2
+        },
+        {
+            "age": 60,
+            "Estrogen": 15,
+            "Menstrual Cycle": 1
+        }
+    ],
+    "Cortisol Data": [
+        {
+            "age": 10,
+            "Cortisol": 8.0,
+            "Stress Level": 0,
+            "Sleep Duration": 10,
+            "Diet": 1
+        },
+        {
+            "age": 12,
+            "Cortisol": 9.5,
+            "Stress Level": 0,
+            "Sleep Duration": 9,
+            "Diet": 1
+        },
+        {
+            "age": 14,
+            "Cortisol": 11.0,
+            "Stress Level": 1,
+            "Sleep Duration": 9,
+            "Diet": 2
+        },
+        {
+            "age": 16,
+            "Cortisol": 12.5,
+            "Stress Level": 1,
+            "Sleep Duration": 8,
+            "Diet": 2
+        },
+        {
+            "age": 18,
+            "Cortisol": 14.0,
+            "Stress Level": 2,
+            "Sleep Duration": 7,
+            "Diet": 2
+        },
+        {
+            "age": 20,
+            "Cortisol": 15.5,
+            "Stress Level": 2,
+            "Sleep Duration": 6,
+            "Diet": 1
+        },
+        {
+            "age": 25,
+            "Cortisol": 17.0,
+            "Stress Level": 2,
+            "Sleep Duration": 6,
+            "Diet": 1
+        },
+        {
+            "age": 30,
+            "Cortisol": 18.5,
+            "Stress Level": 2,
+            "Sleep Duration": 6,
+            "Diet": 2
+        },
+        {
+            "age": 35,
+            "Cortisol": 19.0,
+            "Stress Level": 2,
+            "Sleep Duration": 5,
+            "Diet": 0
+        },
+        {
+            "age": 40,
+            "Cortisol": 21.3,
+            "Stress Level": 2,
+            "Sleep Duration": 4,
+            "Diet": 0
+        },
+        {
+            "age": 50,
+            "Cortisol": 12.0,
+            "Stress Level": 0,
+            "Sleep Duration": 8,
+            "Diet": 1
+        },
+        {
+            "age": 55,
+            "Cortisol": 11.5,
+            "Stress Level": 0,
+            "Sleep Duration": 7,
+            "Diet": 2
+        },
+        {
+            "age": 60,
+            "Cortisol": 14.2,
+            "Stress Level": 1,
+            "Sleep Duration": 5,
+            "Diet": 2
+        }
+    ],
+    "ChromograninA Reference Data": [
+      { "age": 10, "CgA": 1.5 },
+      { "age": 15, "CgA": 1.4 },
+      { "age": 20, "CgA": 1.3 },
+      { "age": 25, "CgA": 1.2 },
+      { "age": 30, "CgA": 1.1 },
+      { "age": 35, "CgA": 1.0 },
+      { "age": 40, "CgA": 0.9 },
+      { "age": 45, "CgA": 0.85 },
+      { "age": 50, "CgA": 0.8 },
+      { "age": 55, "CgA": 0.75 },
+      { "age": 60, "CgA": 0.7 }
+    ],
+    "health_data": [
+        {
+            "exercise_kcal": 300,
+            "age": 45,
+            "steps": 2000,
+            "height": 160.5,
+            "sleep_duration": 6.5,
+            "systolic_bp": 110,
+            "exercise_habit": true,
+            "body_fat": 25.5,
+            "source_type": "direct",
+            "diastolic_bp": 80,
+            "body_temperature": 37,
+            "heart_rate": 120,
+            "user_id": "test_user_1",
+            "weight": 55.5,
+            "date": "2025-03-31"
+        }
+    ]
+}
+
+{
+    "Immunity Data": [
+        {
+            "age": "10-19",
+            "Immunity Score": 40
+        },
+        {
+            "age": "20-29",
+            "Immunity Score": 35
+        },
+        {
+            "age": "30-39",
+            "Immunity Score": 33
+        },
+        {
+            "age": "40-49",
+            "Immunity Score": 30
+        },
+        {
+            "age": "50-59",
+            "Immunity Score": 25
+        },
+        {
+            "age": "60-69",
+            "Immunity Score": 20
+        }
+    ],
+    "Estrogen Data": [
+        {
+            "age_range": "10-19",
+            "Estrogen": 129,
+            "Menstrual Cycle": 1.8
+        },
+        {
+            "age_range": "20-29",
+            "Estrogen": 225,
+            "Menstrual Cycle": 2.0
+        },
+        {
+            "age_range": "30-39",
+            "Estrogen": 109,
+            "Menstrual Cycle": 2.0
+        },
+        {
+            "age_range": "40-49",
+            "Estrogen": 125,
+            "Menstrual Cycle": 2.0
+        },
+        {
+            "age_range": "50-59",
+            "Estrogen": 30,
+            "Menstrual Cycle": 2.0
+        },
+        {
+            "age_range": "60-69",
+            "Estrogen": 17,
+            "Menstrual Cycle": 1.0
+        }
+    ],
+    "Cortisol Data": [
+        {
+            "age_range": "10-19",
+            "Cortisol": 14.25,
+            "Sleep Duration": 9
+        },
+        {
+            "age_range": "20-29",
+            "Cortisol": 14.0,
+            "Sleep Duration": 6
+        },
+        {
+            "age_range": "30-39",
+            "Cortisol": 12.55,
+            "Sleep Duration": 5.5
+        },
+        {
+            "age_range": "40-49",
+            "Cortisol": 11.825,
+            "Sleep Duration": 4
+        },
+        {
+            "age_range": "50-59",
+            "Cortisol": 10.825,
+            "Sleep Duration": 7.5
+        },
+        {
+            "age_range": "60-69",
+            "Cortisol": 10.075,
+            "Sleep Duration": 5
+        }
+    ],
