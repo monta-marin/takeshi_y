@@ -26908,3 +26908,4 @@ AttributeError: 'dict' object has no attribute 'append'
 2025-07-23 09:49:01,362 - INFO - ✅ cortisol モデルは再学習不要。既存モデルを使用します。
 2025-07-23 09:49:01,364 - INFO - ✅ immunity モデルは再学習不要。既存モデルを使用します。
 2025-07-23 09:49:01,366 - INFO - ✅ 解析結果を analysis_results.json に保存しました。
+2025-07-23 15:55:17,611 - INFO - アプリケーションの起動処理が完了！スタートできます！ 🆗

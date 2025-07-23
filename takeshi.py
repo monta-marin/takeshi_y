@@ -34,8 +34,14 @@ import logging
 from typing import Any
 import pandas as pd
 
+
 # FastAPIアプリケーションの初期化
 app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, Takeshi from Render!"}
+
 
 # ログ設定
 logging.basicConfig(
