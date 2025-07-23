@@ -589,9 +589,13 @@ async def get_analyzed_health_data(date: str = Query(None, description="取得�
 async def startup_event():
     logging.info("アプリケーションの起動処理が完了！スタートできます！ 🆗")
 
+import os
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, debug=True)
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port, debug=True)
+
 
 
 # ===========================================       備考欄　　　　　　　==================================================
