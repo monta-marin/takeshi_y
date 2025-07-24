@@ -42,6 +42,20 @@ app = FastAPI()
 def read_root():
     return {"message": "Hello, Takeshi from Render!"}
 
+# ✅ 新しく追加した /healthdata エンドポイント
+@app.get("/healthdata")
+async def get_health_data(date: str = "2025-07-23"):
+    # 仮データ（実際にはデータベースやJSONファイルから取得するなどに置き換え可能）
+    return {
+        "health_data": [
+            {
+                "date": date,
+                "steps": 9876,
+                "calories": 2300,
+                "sleep_hours": 7.5
+            }
+        ]
+    }
 
 # ログ設定
 logging.basicConfig(
