@@ -610,6 +610,11 @@ async def get_analyzed_health_data(date: str = Query(None, description="取得�
 async def startup_event():
     logging.info("アプリケーションの起動処理が完了！スタートできます！ 🆗")
 
+@app.get("/")
+async def root():
+    return {"message": "API server is running"}
+
+
 import os
 
 if __name__ == "__main__":
