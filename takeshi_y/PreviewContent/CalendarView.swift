@@ -116,6 +116,7 @@ struct CalendarView: View {
     private func formattedDate(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")  // ← ここを追加
         return formatter.string(from: date)
     }
 
