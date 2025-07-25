@@ -582,19 +582,28 @@ async def immunity_data(date: str = Query(None, description="取得する日付 
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
 # ✅ カレンダー用
+from datetime import datetime, timedelta
+
 @app.get('/analyze_health_data/calendar')
 async def get_analyzed_health_data(date: str = Query(None, description="取得する日付 (YYYY-MM-DD)")):
     """
-    解析データ全体を取得
+    解析データ全体を取得（暫定：1日ずれを補正）
     """
     try:
         if not date:
             raise HTTPException(status_code=400, detail="日付パラメータが必要です")
-        result = analyze_health_data(date)
+        
+        print(f"📥 リクエストされた日付（補正前）: {date}")
+        
+        # ⚠️ フロントエンドが1日ずれる想定で+1日（暫定対策）
+        corrected_date = (datetime.strptime(date, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
+        
+        print(f"🛠 補正後の使用日付: {corrected_date}")
+        
+        result = analyze_health_data(corrected_date)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
-
 
 # =========================================🛜アプリケーションの処理＆起動🛜=================================================
 @app.on_event("startup")
