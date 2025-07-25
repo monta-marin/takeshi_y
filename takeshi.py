@@ -581,12 +581,9 @@ async def immunity_data(date: str = Query(None, description="取得する日付 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
-# ✅カレンダー用
+# ✅ カレンダー用
 @app.get('/analyze_health_data/calendar')
 async def get_analyzed_health_data(date: str = Query(None, description="取得する日付 (YYYY-MM-DD)")):
-    result = analyze_health_data(date)
-    return result
-    
     """
     解析データ全体を取得
     """
@@ -597,6 +594,7 @@ async def get_analyzed_health_data(date: str = Query(None, description="取得�
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
+
 
 # =========================================🛜アプリケーションの処理＆起動🛜=================================================
 @app.on_event("startup")
