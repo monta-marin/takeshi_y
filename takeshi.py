@@ -4,19 +4,6 @@
 
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
-# =======================【マルチモーダル解析対応】=======================
-# 本システムでは、複数種類の生体情報（モダリティ）を組み合わせて、
-# SVRモデル（Support Vector Regression）によるマルチモーダル解析を実現。
-#
-# 入力モダリティには以下を含む：
-#  - ウェアラブルデバイス由来の生体データ（心拍・歩数・睡眠・体温 など）
-#  - 血圧・血中酸素飽和度（SpO2）
-#  - 免疫スコア・ホルモン（エストロゲン/コルチゾール）データ
-#
-# これらを統合的にモデルへ入力することで、単一モダリティよりも精度の高い
-# 健康状態予測・スコアリングを目指す。
-# =====================================================================
-
 from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from pydantic import BaseModel
 import pandas as pd
@@ -34,28 +21,8 @@ import logging
 from typing import Any
 import pandas as pd
 
-
 # FastAPIアプリケーションの初期化
 app = FastAPI()
-
-@app.get("/")
-def read_root():
-    return {"message": "Hello, Takeshi from Render!"}
-
-# ✅ 新しく追加した /healthdata エンドポイント
-@app.get("/healthdata")
-async def get_health_data(date: str = "2025-07-23"):
-    # 仮データ（実際にはデータベースやJSONファイルから取得するなどに置き換え可能）
-    return {
-        "health_data": [
-            {
-                "date": date,
-                "steps": 9876,
-                "calories": 2300,
-                "sleep_hours": 7.5
-            }
-        ]
-    }
 
 # ログ設定
 logging.basicConfig(
@@ -71,7 +38,7 @@ formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 console_handler.setFormatter(formatter)
 logging.getLogger().addHandler(console_handler)
 
-# ファイルパス定義　➡️
+# ファイルパス定義
 HEALTH_DATA_FILE = "health_data.json"
 SAMPLE_DATA_FILE = "sample_data.json"
 COMBINED_DATA_FILE = "combined_data.json"
@@ -120,9 +87,9 @@ class HealthData(BaseModel):
     date: str                   # データ取得日
     blood_oxygen: float         # 血中酸素濃度（％）
 
-# データファイルのパス　➡️ 相対パスに変更する
-HEALTH_DATA_FILE = "health_data.json"
-COMBINED_DATA_FILE = "combined_data.json"
+# データファイルのパス
+HEALTH_DATA_FILE = "/path/to/health_data.json"
+COMBINED_DATA_FILE = "/path/to/combined_data.json"
 
 app = FastAPI()
 
@@ -291,169 +258,136 @@ if __name__ == "__main__":
 import json
 import logging
 import numpy as np
-import os
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVR
 from datetime import datetime
 import joblib
 from sklearn.preprocessing import StandardScaler
 
-TRACK_FILE = "model_last_trained.json"
-
 
 def setup_logging():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
-def should_retrain(model_key: str, current_data_count: int, threshold: int = 50) -> bool:
-    if not os.path.exists(TRACK_FILE):
-        return True
-    with open(TRACK_FILE, 'r', encoding='utf-8') as f:
-        log = json.load(f)
-    prev_count = log.get(model_key, {}).get("data_count", 0)
-    return (current_data_count - prev_count) >= threshold
-
-
-def update_training_log(model_key: str, current_data_count: int):
-    if os.path.exists(TRACK_FILE):
-        with open(TRACK_FILE, 'r', encoding='utf-8') as f:
-            log = json.load(f)
-    else:
-        log = {}
-    log[model_key] = {
-        "data_count": current_data_count,
-        "last_trained": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    }
-    with open(TRACK_FILE, 'w', encoding='utf-8') as f:
-        json.dump(log, f, indent=4, ensure_ascii=False)
-
 
 def load_combined_data(file_path="combined_data.json"):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             combined_data = json.load(file)
             logging.info(f"✅ ファイル {file_path} を読み込み成功！")
-
+            
             if not combined_data:
                 logging.error("❌ データが空です。")
                 return None
-
+            
             estrogen_data = combined_data.get("Estrogen Data", [])
             cortisol_data = combined_data.get("Cortisol Data", [])
             immunity_data = combined_data.get("Immunity Data", [])
             health_data = combined_data.get("Health Data", {})
-
+            
             return process_health_data(estrogen_data, cortisol_data, immunity_data, health_data)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         logging.error(f"❌ ファイルエラー: {e}")
         return None
 
-
 def smooth_data(data, alpha=0.2):
     smoothed = [data[0]]
     for i in range(1, len(data)):
-        smoothed.append(alpha * data[i] + (1 - alpha) * smoothed[i - 1])
+        smoothed.append(alpha * data[i] + (1 - alpha) * smoothed[i-1])
     return np.array(smoothed)
-
-
-def generate_health_features(health_data, menstrual_cycle_phase=None):
-    height = health_data.get("height", 170)
-    weight = health_data.get("weight", 60)
-    body_fat = health_data.get("body_fat", 20)
-    current_heart_rate = health_data.get("heart_rate", 70)
-    steps = health_data.get("steps", 5000)
-    sleep_hours = health_data.get("sleep_duration", 7)
-    systolic_bp = health_data.get("systolic_bp", 120)
-    diastolic_bp = health_data.get("diastolic_bp", 80)
-    age = health_data.get("age", 30)
-    exercise_habit = int(health_data.get("exercise_habit", False))
-    spo2 = health_data.get("spo2", 98)
-
-    bmi = weight / ((height / 100) ** 2)
-    blood_pressure_ratio = systolic_bp / max(diastolic_bp, 1)
-    exercise_index = exercise_habit * (steps / 10000)
-
-    return np.array([
-        height * 0.8,
-        weight * 0.8,
-        body_fat * 1.2,
-        current_heart_rate * 1.1,
-        steps * 1.0,
-        sleep_hours * 1.2,
-        systolic_bp * 1.1,
-        diastolic_bp * 1.1,
-        age * 1.5,
-        bmi * 1.3,
-        blood_pressure_ratio * 1.2,
-        exercise_index * 1.3,
-        spo2 * 0.9
-    ]).reshape(1, -1)
-
-
-def load_or_train_model(X_train, y_train, model_path, scaler_path, model_key="default_model", **kwargs):
-    current_data_count = len(y_train)
-
-    if os.path.exists(model_path) and os.path.exists(scaler_path) and not should_retrain(model_key, current_data_count):
-        logging.info(f"✅ {model_key} モデルは再学習不要。既存モデルを使用します。")
-        return joblib.load(model_path), joblib.load(scaler_path)
-
-    logging.info(f"🔁 {model_key} モデルを再学習中... データ件数: {current_data_count}")
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X_train)
-    model = SVR(**kwargs)
-    model.fit(X_scaled, y_train)
-    joblib.dump(model, model_path)
-    joblib.dump(scaler, scaler_path)
-    update_training_log(model_key, current_data_count)
-    return model, scaler
-
 
 def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data, menstrual_cycle_phase=None):
     logging.info("✅ 健康データ解析開始")
-    results = {}
-    health_features = generate_health_features(health_data, menstrual_cycle_phase)
-    immunity_values = np.array([data.get('Immunity Score', 0) for data in immunity_data]).reshape(-1, 1)
+    
+    try:
+        # 健康データ取得 & デフォルト値
+        height = health_data.get("height", 170)
+        weight = health_data.get("weight", 60)
+        body_fat = health_data.get("body_fat", 20)
+        current_heart_rate = health_data.get("heart_rate", 70)
+        steps = health_data.get("steps", 5000)
+        sleep_hours = health_data.get("sleep_duration", 7)
+        systolic_bp = health_data.get("systolic_bp", 120)
+        diastolic_bp = health_data.get("diastolic_bp", 80)
+        age = health_data.get("age", 30)
+        exercise_habit = int(health_data.get("exercise_habit", False))
+        spo2 = health_data.get("spo2", 98)
 
-    estrogen_pred = cortisol_pred = immunity_pred = 0  # デフォルト値で固定
+        # 月経周期の影響考慮
+        estrogen_multiplier = 1
+        if menstrual_cycle_phase:
+            if menstrual_cycle_phase == 'ovulation':
+                estrogen_multiplier = 1.5
+            elif menstrual_cycle_phase == 'menstruation':
+                estrogen_multiplier = 0.5
+        
+        # BMI, 血圧比, 運動指数の計算
+        bmi = weight / ((height / 100) ** 2)
+        blood_pressure_ratio = systolic_bp / max(diastolic_bp, 1)
+        exercise_index = exercise_habit * (steps / 10000)  # 運動習慣の指数化
 
-    if len(estrogen_data) > 5:
-        estrogen_values = smooth_data(np.array([data['Estrogen'] for data in estrogen_data]))
-        if menstrual_cycle_phase == 'ovulation':
-            estrogen_values *= 1.5
-        elif menstrual_cycle_phase == 'menstruation':
-            estrogen_values *= 0.5
+        # 特徴量の重み付け調整
+        health_features = np.array([
+            height * 0.8,  # 身長
+            weight * 0.8,  # 体重
+            body_fat * 1.2,  # 体脂肪率（重要視）1.5~1.8
+            current_heart_rate * 1.1,  # 心拍数（重要視）1.3~1.5
+            steps * 1.0,  # 歩数
+            sleep_hours * 1.2,  # 睡眠時間（免疫との関係が深いため）1.2 → 1.5
+            systolic_bp * 1.1,  # 収縮期血圧
+            diastolic_bp * 1.1,  # 拡張期血圧
+            age * 1.5,  # 年齢（強調）1.8~2.0
+            bmi * 1.3,  # BMI（健康指標として重要）
+            blood_pressure_ratio * 1.2,  # 血圧比
+            exercise_index * 1.3,  # 運動指数（運動の影響を強調）1.5~1.7
+            spo2 * 0.9  # SpO₂（通常値が安定しているため影響は小さめ） 0.7~0.8
+        ]).reshape(1, -1)
 
-        X_estrogen = np.hstack((estrogen_values.reshape(-1, 1), immunity_values, np.tile(health_features, (len(estrogen_values), 1))))
-        model_estrogen, scaler_estrogen = load_or_train_model(X_estrogen, estrogen_values.reshape(-1), "model_estrogen.joblib", "scaler_estrogen.joblib", model_key="estrogen", kernel='linear', C=10, epsilon=0.1)
-        X_test_e = scaler_estrogen.transform(np.hstack((estrogen_values[-1].reshape(1, -1), immunity_values[-1].reshape(1, -1), health_features)))
-        estrogen_pred = model_estrogen.predict(X_test_e)[0]
-        results["estrogen_Level"] = round(estrogen_pred, 1)
-    else:
-        results["estrogen_Level"] = "⚠ データ不足"
+        scaler = StandardScaler()
+        immunity_values = np.array([data.get('Immunity Score', 0) for data in immunity_data]).reshape(-1, 1)
 
-    if len(cortisol_data) > 1:
-        cortisol_values = np.array([data['Cortisol'] for data in cortisol_data]).reshape(-1, 1)
-        est_feature = np.full((len(cortisol_values), 1), estrogen_pred)
-        X_cortisol = np.hstack((cortisol_values, immunity_values, est_feature, np.tile(health_features, (len(cortisol_values), 1))))
-        model_cortisol, scaler_cortisol = load_or_train_model(X_cortisol, cortisol_values.reshape(-1), "model_cortisol.joblib", "scaler_cortisol.joblib", model_key="cortisol", kernel='rbf', C=100, gamma='auto', epsilon=0.1)
-        X_test_c = scaler_cortisol.transform(np.hstack((cortisol_values[-1].reshape(1, -1), immunity_values[-1].reshape(1, -1), [[estrogen_pred]], health_features)))
-        cortisol_pred = model_cortisol.predict(X_test_c)[0]
-        results["cortisol_Level"] = round(cortisol_pred, 1)
-    else:
-        results["cortisol_Level"] = "⚠ データ不足"
+        results = {}
 
-    if immunity_values.size > 1:
-        cort_feature = np.full((len(immunity_values), 1), cortisol_pred)
-        X_immunity = np.hstack((immunity_values, cort_feature, np.tile(health_features, (len(immunity_values), 1))))
-        model_immunity, scaler_immunity = load_or_train_model(X_immunity, immunity_values.reshape(-1), "model_immunity.joblib", "scaler_immunity.joblib", model_key="immunity", kernel='rbf', C=100, gamma='auto', epsilon=0.1)
-        X_test_i = scaler_immunity.transform(np.hstack((immunity_values[-1].reshape(1, -1), [[cortisol_pred]], health_features)))
-        immunity_pred = model_immunity.predict(X_test_i)[0]
-        results["immunity_Score"] = round(immunity_pred, 1)
-    else:
-        results["immunity_Score"] = "⚠ データ不足"
+        # エストロゲン推定
+        if len(estrogen_data) > 5:
+            estrogen_values = smooth_data(np.array([data['Estrogen'] for data in estrogen_data]), alpha=0.2)
+            estrogen_values *= estrogen_multiplier
+            X_train = np.hstack((estrogen_values.reshape(-1, 1), immunity_values, np.tile(health_features, (len(estrogen_values), 1))))
+            X_train = scaler.fit_transform(X_train)
+            model_estrogen = SVR(kernel='linear', C=10, epsilon=0.1)
+            model_estrogen.fit(X_train, estrogen_values.reshape(-1))
+            X_test = scaler.transform(np.hstack((estrogen_values[-1].reshape(1, -1), immunity_values[-1].reshape(1, -1), health_features)))
+            results["estrogen_Level"] = round(model_estrogen.predict(X_test)[0], 1)
+        else:
+            results["estrogen_Level"] = "⚠ データ不足"
 
-    save_analysis_results(results)
-    return results
+        # コルチゾール推定
+        if len(cortisol_data) > 1:
+            cortisol_values = np.array([data['Cortisol'] for data in cortisol_data]).reshape(-1, 1)
+            X_train = np.hstack((cortisol_values, immunity_values, np.tile(health_features, (len(cortisol_values), 1))))
+            X_train = scaler.fit_transform(X_train)
+            model_cortisol = SVR(kernel='rbf', C=100, gamma='auto', epsilon=0.1)
+            model_cortisol.fit(X_train, cortisol_values.reshape(-1))
+            X_test = scaler.transform(np.hstack((cortisol_values[-1].reshape(1, -1), immunity_values[-1].reshape(1, -1), health_features)))
+            results["cortisol_Level"] = round(float(model_cortisol.predict(X_test)[0]), 1)
+        else:
+            results["cortisol_Level"] = "⚠ データ不足"
 
+        # 免疫スコア推定
+        if immunity_values.size > 1:
+            X_train = np.hstack((immunity_values, np.tile(health_features, (len(immunity_values), 1))))
+            X_train = scaler.fit_transform(X_train)
+            model_immunity = SVR(kernel='rbf', C=100, gamma='auto', epsilon=0.1)
+            model_immunity.fit(X_train, immunity_values.reshape(-1))
+            X_test = scaler.transform(np.hstack((immunity_values[-1].reshape(1, -1), health_features)))
+            results["immunity_Score"] = round(model_immunity.predict(X_test)[0], 1)
+        else:
+            results["immunity_Score"] = "⚠ データ不足"
+
+        save_analysis_results(results)
+        return results
+
+    except Exception as e:
+        logging.error(f"❌ エラー発生: {e}")
+        return {"エラー": str(e)}
 
 def save_analysis_results(results):
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -466,7 +400,6 @@ def save_analysis_results(results):
     for key, value in results.items():
         print(f"{key}: {value}")
     print("🎉 解析成功しました 🎉")
-
 
 if __name__ == "__main__":
     setup_logging()
@@ -581,26 +514,19 @@ async def immunity_data(date: str = Query(None, description="取得する日付 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
-# ✅ カレンダー用
-from datetime import datetime, timedelta
-
+# ✅カレンダー用
 @app.get('/analyze_health_data/calendar')
 async def get_analyzed_health_data(date: str = Query(None, description="取得する日付 (YYYY-MM-DD)")):
+    result = analyze_health_data(date)
+    return result
+    
     """
-    解析データ全体を取得（暫定：1日ずれを補正）
+    解析データ全体を取得
     """
     try:
         if not date:
             raise HTTPException(status_code=400, detail="日付パラメータが必要です")
-        
-        print(f"📥 リクエストされた日付（補正前）: {date}")
-        
-        # ⚠️ フロントエンドが1日ずれる想定で+1日（暫定対策）
-        corrected_date = (datetime.strptime(date, "%Y-%m-%d") + timedelta(days=1)).strftime("%Y-%m-%d")
-        
-        print(f"🛠 補正後の使用日付: {corrected_date}")
-        
-        result = analyze_health_data(corrected_date)
+        result = analyze_health_data(date)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
@@ -610,18 +536,9 @@ async def get_analyzed_health_data(date: str = Query(None, description="取得�
 async def startup_event():
     logging.info("アプリケーションの起動処理が完了！スタートできます！ 🆗")
 
-@app.get("/")
-async def root():
-    return {"message": "API server is running"}
-
-
-import os
-
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8000))
-    uvicorn.run(app, host="0.0.0.0", port=port, debug=True)
-
+    uvicorn.run(app, host="0.0.0.0", port=8000, debug=True)
 
 
 # ===========================================       備考欄　　　　　　　==================================================
@@ -636,3 +553,4 @@ if __name__ == "__main__":
 # http://192.168.0.59:8000/analyze_health_data/cortisol?date=2025-04-　　続きの日付を入力
 # http://192.168.0.59:8000/analyze_health_data/immunity?date=2025-04-  続きの日付を入力
 # http://192.168.0.59:8000/analyze_health_data/calendar?date=2025-04-　 続きの日付を入力
+
