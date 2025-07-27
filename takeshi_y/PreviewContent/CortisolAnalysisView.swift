@@ -12,7 +12,7 @@ class CortisolDataFetcher: ObservableObject {
 
     func fetchCortisolScore() {
         let formattedDateString = formattedDate()
-        guard let url = URL(string: "http://192.168.0.59:8000/analyze_health_data/cortisol?date=\(formattedDateString)") else {
+        guard let url = URL(string: "https://takeshi-y.onrender.com/analyze_health_data/cortisol?date=\(formattedDateString)") else {
             DispatchQueue.main.async { self.errorMessage = "無効なURLです" }
             return
         }
@@ -223,6 +223,8 @@ struct CortisolAnalysisView_Previews: PreviewProvider {
 }
 
 
+// render： takeshi-y.onrender.com
+// ローカル：192.168.0.59:8000
 
 
 

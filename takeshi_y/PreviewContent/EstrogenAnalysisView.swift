@@ -30,7 +30,7 @@ class EstrogenDataFetcher: ObservableObject {
     func fetchEstrogenScore() {
         let formattedDateString = formattedDate()
 
-        guard let url = URL(string: "http://192.168.0.59:8000/analyze_health_data/estrogen?date=\(formattedDateString)") else {
+        guard let url = URL(string: "https://takeshi-y.onrender.com/analyze_health_data/estrogen?date=\(formattedDateString)") else {
             DispatchQueue.main.async {
                 self.errorMessage = "無効なURLです"
             }
@@ -209,5 +209,7 @@ struct EstrogenAnalysisView_Previews: PreviewProvider {
 
 
 
-// 2025/2/28　内容修正
+// render： takeshi-y.onrender.com
+// ローカル：192.168.0.59:8000
+
 

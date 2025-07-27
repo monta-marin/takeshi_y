@@ -53,16 +53,21 @@ struct MeasurementPageView: View {
             return
         }
 
-        guard let url = URL(string: "http://192.168.0.59:8000/healthdata"),
+// render クラウドに送る
+        guard let url = URL(string: "https://takeshi-y.onrender.com/healthdata"),
               let userId = viewModel.measurements.first?.userId else {
             print("❌ URLまたはユーザーIDの取得に失敗しました")
             return
         }
 
+
         let dataDict = Dictionary(uniqueKeysWithValues: viewModel.measurements.map { ($0.title, $0.value) })
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+  // ← ここが重要
         let birthdateString = dateFormatter.string(from: viewModel.birthdate)
 
         let payload: [String: Any] = [

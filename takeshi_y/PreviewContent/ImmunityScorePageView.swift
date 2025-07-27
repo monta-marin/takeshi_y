@@ -12,7 +12,7 @@ class ImmunityDataFetcher: ObservableObject {
 
     func fetchImmunityScore() {
         let formattedDateString = formattedDate()
-        guard let url = URL(string: "http://192.168.0.59:8000/analyze_health_data/immunity?date=\(formattedDateString)") else {
+        guard let url = URL(string: "https://takeshi-y.onrender.com/analyze_health_data/immunity?date=\(formattedDateString)") else {
             DispatchQueue.main.async { self.errorMessage = "無効なURLです" }
             return
         }
@@ -209,3 +209,6 @@ struct ImmunityAnalysisView_Previews: PreviewProvider {
         ImmunityAnalysisView()
     }
 }
+
+// render： takeshi-y.onrender.com
+// ローカル：192.168.0.59:8000

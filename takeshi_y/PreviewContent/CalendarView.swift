@@ -72,7 +72,7 @@ struct CalendarView: View {
         errorMessage = nil
         noDataForSelectedDate = false
 
-        let urlString = "http://192.168.0.59:8000/analyze_health_data/calendar?date=\(formattedDateString)"
+        let urlString = "https://takeshi-y.onrender.com/analyze_health_data/calendar?date=\(formattedDateString)"
         guard let url = URL(string: urlString) else {
             errorMessage = "❌ 無効なURLです"
             isFetchingData = false
@@ -116,9 +116,10 @@ struct CalendarView: View {
     private func formattedDate(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")  // ← ここを追加
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo") // JST を指定
         return formatter.string(from: date)
     }
+
 
     // データを保存する関数
     private func saveData(for date: Date) {
@@ -145,3 +146,6 @@ struct CalendarData: Codable {
     }
 }
 
+
+// render： takeshi-y.onrender.com
+// ローカル：192.168.0.59:8000
