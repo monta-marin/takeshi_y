@@ -9,7 +9,7 @@ from pydantic import BaseModel
 import pandas as pd
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler, LabelEncoder
@@ -408,7 +408,7 @@ if __name__ == "__main__":
 # =========================================📄サーバーからアプリにデータを渡す📄==========================================
 # ✅解析結果を取得
 from fastapi import FastAPI, HTTPException, Query
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 def fetch_real_health_data(date: str):
     """
@@ -530,6 +530,8 @@ async def get_analyzed_health_data(date: str = Query(None, description="取得�
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
+        
+        
 
 # =========================================🛜アプリケーションの処理＆起動🛜=================================================
 @app.on_event("startup")
