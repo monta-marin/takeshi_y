@@ -117,7 +117,7 @@ struct CalendarView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         formatter.timeZone = TimeZone(identifier: "Asia/Tokyo") // JST を指定
-        return formatter.string(from: date)
+        return formatter.string(from: date)  // ✅ ここでStringを返している
     }
 
 
