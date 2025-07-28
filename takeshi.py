@@ -407,45 +407,45 @@ if __name__ == "__main__":
 
 # =========================================📄サーバーからアプリにデータを渡す📄==========================================
 # ✅解析結果を取得
+import os
+import json
+from datetime import datetime
 from fastapi import FastAPI, HTTPException, Query
-from datetime import datetime, timedelta, timezone
+
+app = FastAPI()
 
 def fetch_real_health_data(date: str):
     """
-    analysis_results.json から該当する日付のデータを読み取り、英語キーに変換して返す
+    analysis_results/YYYY-MM-DD.json を読み込み
     """
-    import json
+    file_path = f"analysis_results/{date}.json"
+    if not os.path.exists(file_path):
+        raise ValueError(f"{file_path} が見つかりません")
 
-    # analysis_results.jsonを読み込む
-    with open("analysis_results.json", "r", encoding="utf-8") as f:
+    with open(file_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    # 日付一致のデータを取得
-    if data.get("timestamp", "").startswith(date):
-        return {
-            "immunity_Score": data.get("immunity_Score"),
-            "estrogen_Level": data.get("estrogen_Level"),
-            "cortisol_Level": data.get("cortisol_Level"),
-            "timestamp": data.get("timestamp")
-        }
-    else:
-        raise ValueError(f"{date} に一致するデータが見つかりませんでした")
+    return {
+        "immunity_Score": data.get("immunity_Score"),
+        "estrogen_Level": data.get("estrogen_Level"),
+        "cortisol_Level": data.get("cortisol_Level"),
+        "timestamp": data.get("timestamp")
+    }
 
 def analyze_health_data(date: str):
     try:
         health_data = fetch_real_health_data(date)
-
         return {
             "date": date,
             "immunity_Score": health_data["immunity_Score"],
             "estrogen_Level": health_data["estrogen_Level"],
             "cortisol_Level": health_data["cortisol_Level"],
-            "timestamp": health_data.get("保存日時", datetime.now().isoformat())
+            "timestamp": health_data.get("timestamp", datetime.now().isoformat())
         }
-
     except Exception as e:
         print(f"analyze_health_data 内でエラー: {e}")
         raise e
+
 
 @app.get('/healthdata')
 async def get_health_data(date: str = Query(None, description="取得する日付 (YYYY-MM-DD)")):
