@@ -418,6 +418,14 @@ app = FastAPI()
 def read_root():
     return {"message": "FastAPI is running"}
 
+
+def validate_date_format(date_str: str):
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="日付形式が不正です。YYYY-MM-DD 形式で指定してください。")
+
+
 def fetch_real_health_data(date: str):
     """
     指定日付の JSON ファイルを読み込み、健康データを返す
@@ -445,11 +453,13 @@ def fetch_real_health_data(date: str):
         "timestamp": data["timestamp"]
     }
 
+
 def analyze_health_data(date: str):
     """
     健康データを読み込み、整形された辞書を返す
     """
     try:
+        validate_date_format(date)
         health_data = fetch_real_health_data(date)
         return {
             "date": date,
@@ -459,19 +469,14 @@ def analyze_health_data(date: str):
             "timestamp": health_data["timestamp"]
         }
     except Exception as e:
-        print(f"analyze_health_data 内でエラー: {e}")
+        print(f"[ERROR] analyze_health_data: {e}")
         raise e
-
 
 # ✅ 総合データ取得（カレンダー等で使用）
 @app.get("/healthdata/calendar")
 async def get_analyzed_health_data(date: str = Query(..., description="取得する日付 (YYYY-MM-DD)")):
-    """
-    指定日付の健康データ全体を返す
-    """
     try:
-        result = analyze_health_data(date)
-        return result
+        return analyze_health_data(date)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
@@ -479,9 +484,6 @@ async def get_analyzed_health_data(date: str = Query(..., description="取得す
 # ✅ エストロゲン取得
 @app.get("/healthdata/estrogen")
 async def estrogen_data(date: str = Query(..., description="取得する日付 (YYYY-MM-DD)")):
-    """
-    エストロゲンレベルのみを返す
-    """
     try:
         result = analyze_health_data(date)
         return {"estrogen_Level": result.get("estrogen_Level", "データ不足")}
@@ -492,9 +494,6 @@ async def estrogen_data(date: str = Query(..., description="取得する日付 (
 # ✅ コルチゾール取得
 @app.get("/healthdata/cortisol")
 async def cortisol_data(date: str = Query(..., description="取得する日付 (YYYY-MM-DD)")):
-    """
-    コルチゾールレベルのみを返す
-    """
     try:
         result = analyze_health_data(date)
         return {"cortisol_Level": result.get("cortisol_Level", "データ不足")}
@@ -505,9 +504,6 @@ async def cortisol_data(date: str = Query(..., description="取得する日付 (
 # ✅ 免疫スコア取得
 @app.get("/healthdata/immunity")
 async def immunity_data(date: str = Query(..., description="取得する日付 (YYYY-MM-DD)")):
-    """
-    免疫スコアのみを返す
-    """
     try:
         result = analyze_health_data(date)
         return {"immunity_Score": result.get("immunity_Score", "データ不足")}
@@ -515,20 +511,18 @@ async def immunity_data(date: str = Query(..., description="取得する日付 (
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
 
-# ✅ 任意日付の全データ取得（補助）
+# ✅ 任意日付の全データ取得（GET用）
 @app.get("/healthdata")
 async def get_health_data(date: str = Query(..., description="取得する日付 (YYYY-MM-DD)")):
-    """
-    指定日付のすべての健康データを返す（calendarと同等）
-    """
     try:
         result = analyze_health_data(date)
         return result
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
-        print(f"get_health_data 内でエラー: {e}")
+        print(f"[ERROR] get_health_data: {e}")
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
+
 
         
         
