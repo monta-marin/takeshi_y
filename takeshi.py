@@ -112,14 +112,11 @@ import pandas as pd
 @app.post('/healthdata')
 async def submit_healthdata(new_data: dict, background_tasks: BackgroundTasks):
     try:
-        background_tasks.add_task(overwrite_health_data, new_data)  # Run this function in the background
-        logging.info(f"✅ 新しいヘルスデータが受信され、サンプルデータと合算成功🆗: {new_data}")
+        background_tasks.add_task(overwrite_health_data, new_data)
+        logging.info(f"✅ 新しいヘルスデータ受信: {new_data}")
         return {"message": "新しい健康データが受信されました", "data": new_data}
     except Exception as e:
-        logging.error(f"健康データの処理エラー: {e}")
-        raise HTTPException(status_code=500, detail="データの保存に失敗しました")
-    except Exception as e:
-        logging.error(f"健康データの処理エラー: {e}")
+        logging.error(f"❌ 処理エラー: {e}")
         raise HTTPException(status_code=500, detail="データの保存に失敗しました")
 
 # ===============================🍎「アプリからのデータを取得してcombined_data.jsonに追加保存する」🍎==========================
