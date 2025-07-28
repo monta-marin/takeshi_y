@@ -258,6 +258,8 @@ import joblib
 from sklearn.preprocessing import StandardScaler
 
 
+
+
 def setup_logging():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -383,11 +385,21 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
         return {"エラー": str(e)}
 
 def save_analysis_results(results):
+    current_date = datetime.now().strftime('%Y-%m-%d')
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     results["timestamp"] = current_time
-    filename = "analysis_results.json"
+
+    # 保存先フォルダ
+    directory = "analyze_results"
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    # ファイル名を日付付きに
+    filename = os.path.join(directory, f"{current_date}.json")
+
     with open(filename, 'w', encoding='utf-8') as file:
         json.dump(results, file, indent=4, ensure_ascii=False)
+    
     logging.info(f"✅ 解析結果を {filename} に保存しました。")
     print("\n🎉 解析成功 🎉！結果:")
     for key, value in results.items():
@@ -448,6 +460,9 @@ def fetch_real_health_data(date: str):
 def analyze_health_data(date: str):
     """
     健康データを読み込み、整形された辞書を返す
+    
+    file_path = f"analyze_results/{date}.json"
+
     """
     try:
         validate_date_format(date)
