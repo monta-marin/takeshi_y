@@ -246,8 +246,6 @@ def load_combined_data(file_path="combined_data.json"):
 if __name__ == "__main__":
     logging.info("🔵 サーバー起動: データ更新は実行されません")
 
-    # 必要なときに fetch_and_update_data_from_api(url) を手動実行
-    # 例: fetch_and_update_data_from_api("http://192.168.0.59:8000/healthdata")
  
 # =======================🍎 解析システムエリア　機械学習モデルSupport Vector Regression（SVR）　🍎===========================
 import json

@@ -425,7 +425,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				Content = "";
 				"DEPLOYMENT_LOCATION[sdk=*]" = NO;
-				DEVELOPMENT_ASSET_PATHS = "Content \"/Users/yamasakitakeshi/Desktop/takeshi_y/Content\"";
 				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -463,7 +462,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				Content = "";
-				DEVELOPMENT_ASSET_PATHS = "Content \"/Users/yamasakitakeshi/Desktop/takeshi_y/Content\"";
 				DEVELOPMENT_TEAM = VF3Y29B2ZJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
