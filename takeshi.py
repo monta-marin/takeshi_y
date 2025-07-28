@@ -477,9 +477,10 @@ async def get_analyzed_health_data(date: str = Query(..., description="取得す
 async def estrogen_data(date: str = Query(..., description="取得する日付 (YYYY-MM-DD)")):
     try:
         result = analyze_health_data(date)
-        return {"estrogen_level": result.get("estrogen_level", "データ不足")}
+        return {"estrogen_Level": result.get("estrogen_Level", "データ不足")}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
+
 
 # ✅ コルチゾール取得
 @app.get("/healthdata/cortisol")
