@@ -410,9 +410,21 @@ if __name__ == "__main__":
 import os
 import json
 from datetime import datetime
-from fastapi import FastAPI, HTTPException, Query
 
-app = FastAPI()
+def save_health_data(date: str, data: dict):
+    """
+    指定された日付のデータを analysis_results/YYYY-MM-DD.json に保存する
+    """
+    os.makedirs("analysis_results", exist_ok=True)  # フォルダがなければ作成
+    file_path = f"analysis_results/{date}.json"
+
+    # タイムスタンプを自動追加（上書き含む）
+    data["timestamp"] = datetime.now().isoformat()
+
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    print(f"✅ {file_path} に保存されました")
 
 def fetch_real_health_data(date: str):
     """
@@ -433,6 +445,9 @@ def fetch_real_health_data(date: str):
     }
 
 def analyze_health_data(date: str):
+    """
+    指定日付の健康データを取得し、必要であれば保存も可能
+    """
     try:
         health_data = fetch_real_health_data(date)
         return {
@@ -445,6 +460,7 @@ def analyze_health_data(date: str):
     except Exception as e:
         print(f"analyze_health_data 内でエラー: {e}")
         raise e
+
 
 
 @app.get('/healthdata')
