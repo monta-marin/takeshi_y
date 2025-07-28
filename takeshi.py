@@ -410,6 +410,10 @@ if __name__ == "__main__":
 from fastapi import FastAPI, HTTPException, Query
 from datetime import datetime, timedelta, timezone
 
+@app.get("/")
+def read_root():
+    return {"message": "FastAPI is running"}
+
 def fetch_real_health_data(date: str):
     """
     analysis_results.json から該当する日付のデータを読み取り、英語キーに変換して返す
@@ -446,6 +450,8 @@ def analyze_health_data(date: str):
     except Exception as e:
         print(f"analyze_health_data 内でエラー: {e}")
         raise e
+        
+        
 
 @app.get('/healthdata')
 async def get_health_data(date: str = Query(None, description="取得する日付 (YYYY-MM-DD)")):
