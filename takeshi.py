@@ -91,8 +91,6 @@ class HealthData(BaseModel):
 HEALTH_DATA_FILE = "/path/to/health_data.json"
 COMBINED_DATA_FILE = "/path/to/combined_data.json"
 
-app = FastAPI()
-
 # ログを記録するための ロガー（logger）
 # _____________________________________
 logging.basicConfig(level=logging.INFO)
@@ -409,8 +407,6 @@ from datetime import datetime
 import json
 import os
 
-app = FastAPI()
-
 @app.get("/")
 def read_root():
     return {"message": "FastAPI is running"}
@@ -519,10 +515,6 @@ async def get_health_data(date: str = Query(..., description="取得する日付
     except Exception as e:
         print(f"[ERROR] get_health_data: {e}")
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
-
-
-        
-        
 
 # =========================================🛜アプリケーションの処理＆起動🛜=================================================
 @app.on_event("startup")
