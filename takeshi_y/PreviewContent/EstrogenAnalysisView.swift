@@ -30,7 +30,7 @@ class EstrogenDataFetcher: ObservableObject {
     func fetchEstrogenScore() {
         let formattedDateString = formattedDate()
 
-        guard let url = URL(string: "https://takeshi-y.onrender.com/estrogen?date=\(formattedDateString)") else {
+        guard let url = URL(string: "https://takeshi-y.onrender.com/healthdata/estrogen?date=\(formattedDateString)") else {
             DispatchQueue.main.async {
                 self.errorMessage = "無効なURLです"
             }

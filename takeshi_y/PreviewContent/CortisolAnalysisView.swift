@@ -12,7 +12,7 @@ class CortisolDataFetcher: ObservableObject {
 
     func fetchCortisolScore() {
         let formattedDateString = formattedDate()
-        guard let url = URL(string: "https://takeshi-y.onrender.com/cortisol?date=\(formattedDateString)") else {
+        guard let url = URL(string: "https://takeshi-y.onrender.com/healthdata/cortisol?date=\(formattedDateString)") else {
             DispatchQueue.main.async { self.errorMessage = "無効なURLです" }
             return
         }

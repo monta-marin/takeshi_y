@@ -72,7 +72,7 @@ struct CalendarView: View {
         errorMessage = nil
         noDataForSelectedDate = false
 
-        let urlString = "https://takeshi-y.onrender.com/calendar?date=\(formattedDateString)"
+        let urlString = "https://takeshi-y.onrender.com/healthdata/calendar?date=\(formattedDateString)"
         guard let url = URL(string: urlString) else {
             errorMessage = "❌ 無効なURLです"
             isFetchingData = false
