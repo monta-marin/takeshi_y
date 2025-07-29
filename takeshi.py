@@ -257,9 +257,6 @@ from datetime import datetime
 import joblib
 from sklearn.preprocessing import StandardScaler
 
-
-
-
 def setup_logging():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -384,6 +381,11 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
         logging.error(f"❌ エラー発生: {e}")
         return {"エラー": str(e)}
 
+# 解析結果のデータをgithubのanalysis_resultsに保存する　2025/7/28変更！
+
+DATE = datetime.now().strftime('%Y-%m-%d')
+FILE_PATH = f"analysis_results/{DATE}.json"
+
 def save_analysis_results(results):
     current_date = datetime.now().strftime('%Y-%m-%d')
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -399,12 +401,16 @@ def save_analysis_results(results):
 
     with open(filename, 'w', encoding='utf-8') as file:
         json.dump(results, file, indent=4, ensure_ascii=False)
-    
+
     logging.info(f"✅ 解析結果を {filename} に保存しました。")
     print("\n🎉 解析成功 🎉！結果:")
     for key, value in results.items():
         print(f"{key}: {value}")
     print("🎉 解析成功しました 🎉")
+
+    # ここでGitHub保存関数を呼び出す
+    save_to_github(results)
+
 
 if __name__ == "__main__":
     setup_logging()
