@@ -386,6 +386,47 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
 DATE = datetime.now().strftime('%Y-%m-%d')
 FILE_PATH = f"analysis_results/{DATE}.json"
 
+# 追加
+import os
+import json
+import base64
+import requests
+from datetime import datetime
+
+def save_to_github(analysis_result):
+    GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # 環境変数にGitHubトークンを設定しておく
+    REPO = "monta-marin/takeshi_y"  # ★ あなたのリポジトリ名に変更（例：username/repo）
+    BRANCH = "main"
+    DATE = datetime.now().strftime('%Y-%m-%d')
+    FILE_PATH = f"analysis_results/{DATE}.json"
+
+    json_str = json.dumps(analysis_result, ensure_ascii=False, indent=2)
+    b64_content = base64.b64encode(json_str.encode("utf-8")).decode("utf-8")
+
+    url = f"https://api.github.com/repos/{REPO}/contents/{FILE_PATH}"
+    headers = {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    resp = requests.get(url, headers=headers)
+    sha = resp.json().get("sha") if resp.status_code == 200 else None
+
+    payload = {
+        "message": f"Add analysis result for {DATE}",
+        "content": b64_content,
+        "branch": BRANCH
+    }
+    if sha:
+        payload["sha"] = sha
+
+    put_resp = requests.put(url, headers=headers, json=payload)
+    if put_resp.status_code in [200, 201]:
+        print(f"✅ GitHubに保存成功: {FILE_PATH}")
+    else:
+        print(f"❌ GitHub保存失敗: {put_resp.status_code}")
+        print(put_resp.json())
+
 def save_analysis_results(results):
     current_date = datetime.now().strftime('%Y-%m-%d')
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
