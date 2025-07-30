@@ -393,7 +393,7 @@ import base64
 import requests
 from datetime import datetime
 
-def save_to_github(analysis_result):
+def save_analysis_results(results):
     GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # 環境変数にGitHubトークンを設定しておく
     REPO = "monta-marin/takeshi_y"
     BRANCH = "main"
