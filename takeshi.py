@@ -400,7 +400,7 @@ def save_analysis_results(results):
     DATE = datetime.now().strftime('%Y-%m-%d')
     FILE_PATH = f"analysis_results/{DATE}.json"
 
-    json_str = json.dumps(analysis_result, ensure_ascii=False, indent=2)
+    json_str = json.dumps(result, ensure_ascii=False, indent=2)
     b64_content = base64.b64encode(json_str.encode("utf-8")).decode("utf-8")
 
     url = f"https://api.github.com/repos/{REPO}/contents/{FILE_PATH}"
