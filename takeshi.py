@@ -395,7 +395,7 @@ from datetime import datetime
 
 def save_to_github(analysis_result):
     GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # 環境変数にGitHubトークンを設定しておく
-    REPO = "monta-marin/takeshi_y"  # ★ あなたのリポジトリ名に変更（例：username/repo）
+    REPO = "monta-marin/takeshi_y"
     BRANCH = "main"
     DATE = datetime.now().strftime('%Y-%m-%d')
     FILE_PATH = f"analysis_results/{DATE}.json"
@@ -426,9 +426,6 @@ def save_to_github(analysis_result):
     else:
         print(f"❌ GitHub保存失敗: {put_resp.status_code}")
         print(put_resp.json())
-
-    # ここでGitHub保存関数を呼び出す
-    save_to_github(results)
 
 
 if __name__ == "__main__":
