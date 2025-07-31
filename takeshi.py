@@ -394,6 +394,9 @@ import requests
 from datetime import datetime
 
 def save_analysis_results(results):
+    # timestampを追加
+    results["timestamp"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # 環境変数にGitHubトークンを設定しておく
     REPO = "monta-marin/takeshi_y"
     BRANCH = "main"
