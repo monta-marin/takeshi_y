@@ -508,7 +508,10 @@ def analyze_health_data(date: str):
 @app.get("/healthdata/calendar")
 async def get_analyzed_health_data(date: str = Query(..., description="取得する日付 (YYYY-MM-DD)")):
     try:
-        return analyze_health_data(date)
+        result = analyze_health_data(date)
+        if result is None:
+            raise HTTPException(status_code=404, detail="データが見つかりません")
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
