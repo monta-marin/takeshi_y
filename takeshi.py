@@ -256,6 +256,9 @@ from sklearn.svm import SVR
 from datetime import datetime
 import joblib
 from sklearn.preprocessing import StandardScaler
+import os
+import base64
+import requests
 
 def setup_logging():
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -277,7 +280,7 @@ def load_combined_data(file_path="combined_data.json"):
             
             return process_health_data(estrogen_data, cortisol_data, immunity_data, health_data)
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        logging.error(f"❌ ファイルエラー: {e}")
+        logging.error(f"❌ ファイルエラー: {e}", exc_info=True)
         return None
 
 def smooth_data(data, alpha=0.2):
@@ -290,6 +293,11 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
     logging.info("✅ 健康データ解析開始")
     
     try:
+        logging.info(f"Estrogenデータ数: {len(estrogen_data)}")
+        logging.info(f"Cortisolデータ数: {len(cortisol_data)}")
+        logging.info(f"Immunityデータ数: {len(immunity_data)}")
+        logging.info(f"Healthデータ内容: {health_data}")
+
         # 健康データ取得 & デフォルト値
         height = health_data.get("height", 170)
         weight = health_data.get("weight", 60)
@@ -318,19 +326,19 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
 
         # 特徴量の重み付け調整
         health_features = np.array([
-            height * 0.8,  # 身長
-            weight * 0.8,  # 体重
-            body_fat * 1.2,  # 体脂肪率（重要視）1.5~1.8
-            current_heart_rate * 1.1,  # 心拍数（重要視）1.3~1.5
-            steps * 1.0,  # 歩数
-            sleep_hours * 1.2,  # 睡眠時間（免疫との関係が深いため）1.2 → 1.5
-            systolic_bp * 1.1,  # 収縮期血圧
-            diastolic_bp * 1.1,  # 拡張期血圧
-            age * 1.5,  # 年齢（強調）1.8~2.0
-            bmi * 1.3,  # BMI（健康指標として重要）
-            blood_pressure_ratio * 1.2,  # 血圧比
-            exercise_index * 1.3,  # 運動指数（運動の影響を強調）1.5~1.7
-            spo2 * 0.9  # SpO₂（通常値が安定しているため影響は小さめ） 0.7~0.8
+            height * 0.8,
+            weight * 0.8,
+            body_fat * 1.2,
+            current_heart_rate * 1.1,
+            steps * 1.0,
+            sleep_hours * 1.2,
+            systolic_bp * 1.1,
+            diastolic_bp * 1.1,
+            age * 1.5,
+            bmi * 1.3,
+            blood_pressure_ratio * 1.2,
+            exercise_index * 1.3,
+            spo2 * 0.9
         ]).reshape(1, -1)
 
         scaler = StandardScaler()
@@ -340,6 +348,7 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
 
         # エストロゲン推定
         if len(estrogen_data) > 5:
+            logging.info("SVRモデル学習開始 (estrogen)")
             estrogen_values = smooth_data(np.array([data['Estrogen'] for data in estrogen_data]), alpha=0.2)
             estrogen_values *= estrogen_multiplier
             X_train = np.hstack((estrogen_values.reshape(-1, 1), immunity_values, np.tile(health_features, (len(estrogen_values), 1))))
@@ -348,11 +357,13 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
             model_estrogen.fit(X_train, estrogen_values.reshape(-1))
             X_test = scaler.transform(np.hstack((estrogen_values[-1].reshape(1, -1), immunity_values[-1].reshape(1, -1), health_features)))
             results["estrogen_Level"] = round(model_estrogen.predict(X_test)[0], 1)
+            logging.info(f"推定エストロゲン値: {results['estrogen_Level']}")
         else:
             results["estrogen_Level"] = "⚠ データ不足"
 
         # コルチゾール推定
         if len(cortisol_data) > 1:
+            logging.info("SVRモデル学習開始 (cortisol)")
             cortisol_values = np.array([data['Cortisol'] for data in cortisol_data]).reshape(-1, 1)
             X_train = np.hstack((cortisol_values, immunity_values, np.tile(health_features, (len(cortisol_values), 1))))
             X_train = scaler.fit_transform(X_train)
@@ -360,38 +371,32 @@ def process_health_data(estrogen_data, cortisol_data, immunity_data, health_data
             model_cortisol.fit(X_train, cortisol_values.reshape(-1))
             X_test = scaler.transform(np.hstack((cortisol_values[-1].reshape(1, -1), immunity_values[-1].reshape(1, -1), health_features)))
             results["cortisol_Level"] = round(float(model_cortisol.predict(X_test)[0]), 1)
+            logging.info(f"推定コルチゾール値: {results['cortisol_Level']}")
         else:
             results["cortisol_Level"] = "⚠ データ不足"
 
         # 免疫スコア推定
         if immunity_values.size > 1:
+            logging.info("SVRモデル学習開始 (immunity)")
             X_train = np.hstack((immunity_values, np.tile(health_features, (len(immunity_values), 1))))
             X_train = scaler.fit_transform(X_train)
             model_immunity = SVR(kernel='rbf', C=100, gamma='auto', epsilon=0.1)
             model_immunity.fit(X_train, immunity_values.reshape(-1))
             X_test = scaler.transform(np.hstack((immunity_values[-1].reshape(1, -1), health_features)))
             results["immunity_Score"] = round(model_immunity.predict(X_test)[0], 1)
+            logging.info(f"推定免疫スコア: {results['immunity_Score']}")
         else:
             results["immunity_Score"] = "⚠ データ不足"
 
+        logging.info("GitHub保存処理開始")
         save_analysis_results(results)
+        logging.info("GitHub保存処理完了")
+
         return results
 
     except Exception as e:
-        logging.error(f"❌ エラー発生: {e}")
+        logging.error(f"❌ エラー発生: {e}", exc_info=True)
         return {"エラー": str(e)}
-
-# 解析結果のデータをgithubのanalysis_resultsに保存する　2025/7/28変更！
-
-DATE = datetime.now().strftime('%Y-%m-%d')
-FILE_PATH = f"analysis_results/{DATE}.json"
-
-# 追加
-import os
-import json
-import base64
-import requests
-from datetime import datetime
 
 def save_analysis_results(results):
     GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN")  # 環境変数にGitHubトークンを設定しておく
@@ -422,11 +427,10 @@ def save_analysis_results(results):
 
     put_resp = requests.put(url, headers=headers, json=payload)
     if put_resp.status_code in [200, 201]:
-        print(f"✅ GitHubに保存成功: {FILE_PATH}")
+        logging.info(f"✅ GitHubに保存成功: {FILE_PATH}")
     else:
-        print(f"❌ GitHub保存失敗: {put_resp.status_code}")
-        print(put_resp.json())
-
+        logging.error(f"❌ GitHub保存失敗: {put_resp.status_code}")
+        logging.error(put_resp.json())
 
 if __name__ == "__main__":
     setup_logging()
