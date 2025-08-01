@@ -4,12 +4,20 @@
 import SwiftUI
 
 struct CalendarView: View {
-    @State private var selectedDate = Date()
+    @AppStorage("lastSelectedDate") private var lastSelectedDateString: String = ""
+
+    @State private var selectedDate: Date = {
+        let jst = TimeZone(identifier: "Asia/Tokyo")!
+        let calendar = Calendar(identifier: .gregorian)
+        let now = Date()
+        let components = calendar.dateComponents(in: jst, from: now)
+        return calendar.date(from: components) ?? now
+    }()
+
     @State private var isFetchingData = false
     @State private var errorMessage: String? = nil
     @State private var noDataForSelectedDate = false
 
-    // 日付ごとのデータを保持する辞書
     @State private var healthDataByDate: [String: CalendarData] = [:]
 
     var body: some View {
@@ -21,7 +29,6 @@ struct CalendarView: View {
             DatePicker("日付を選択", selection: $selectedDate, displayedComponents: .date)
                 .datePickerStyle(GraphicalDatePickerStyle())
                 .padding()
-
 
             if let errorMessage = errorMessage {
                 Text(errorMessage)
@@ -49,7 +56,6 @@ struct CalendarView: View {
                 .padding()
             }
 
-            // 保存ボタン
             Button(action: { saveData(for: selectedDate) }) {
                 Text("データを保存")
                     .font(.headline)
@@ -61,7 +67,14 @@ struct CalendarView: View {
             .padding()
         }
         .onAppear {
+            if let savedDate = ISO8601DateFormatter().date(from: lastSelectedDateString) {
+                selectedDate = savedDate
+            }
             fetchData(for: selectedDate)
+        }
+        .onChange(of: selectedDate) { newDate in
+            lastSelectedDateString = ISO8601DateFormatter().string(from: newDate)
+            fetchData(for: newDate)
         }
     }
 
@@ -103,7 +116,6 @@ struct CalendarView: View {
 
                 do {
                     let decodedData = try JSONDecoder().decode(CalendarData.self, from: data)
-                    // データを保存
                     healthDataByDate[formattedDateString] = decodedData
                 } catch {
                     errorMessage = "❌ JSON解析エラー: \(error.localizedDescription)"
@@ -116,24 +128,20 @@ struct CalendarView: View {
     private func formattedDate(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo") // JST を指定
-        return formatter.string(from: date)  // ✅ ここでStringを返している
+        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        return formatter.string(from: date)
     }
 
-
-    // データを保存する関数
     private func saveData(for date: Date) {
         let formattedDateString = formattedDate(date: date)
         if let data = healthDataByDate[formattedDateString] {
             print("保存しました: \(formattedDateString) - エストロゲン: \(data.estrogen), コルチゾール: \(data.cortisol), 免疫力: \(data.immunity)")
-            // 必要に応じてローカルに保存する処理を追加（例: UserDefaultsやCoreDataなど）
         } else {
             errorMessage = "❌ 保存するデータがありません"
         }
     }
 }
 
-// サーバーのJSONレスポンスに合わせた構造体
 struct CalendarData: Codable {
     let estrogen: Double
     let cortisol: Double

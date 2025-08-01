@@ -512,7 +512,10 @@ async def get_analyzed_health_data(date: str = Query(..., description="取得す
         if result is None:
             raise HTTPException(status_code=404, detail="データが見つかりません")
         return result
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
+        print(f"[ERROR] get_analyzed_health_data: {e}")
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
 
