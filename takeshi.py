@@ -555,16 +555,25 @@ async def get_health_data(date: str = Query(..., description="取得する日付
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
 # =========================================🛜アプリケーションの処理＆起動🛜=================================================
+from fastapi import FastAPI
+import logging
+import os
+import uvicorn
+
+app = FastAPI()
+
 @app.on_event("startup")
 async def startup_event():
     logging.info("アプリケーションの起動処理が完了！スタートできます！ 🆗")
 
-if __name__ == "__main__":
-    import uvicorn
-    import os
+@app.get("/")
+def read_root():
+    return {"message": "FastAPI is running on Cloud Run!"}
 
-    port = int(os.environ.get("PORT", 8080))  # Cloud RunのPORT環境変数を利用
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
     uvicorn.run(app, host="0.0.0.0", port=port)
+
 
 # ===========================================       備考欄　　　　　　　==================================================
 # true有効　False無効
