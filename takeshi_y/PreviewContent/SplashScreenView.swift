@@ -67,7 +67,7 @@ struct SplashScreenView: View {
             VStack {
                 Image("Image")
                     .resizable()
-                    .frame(width: 150, height: 150)
+                    .frame(width: 250, height: 250)
                     .opacity(imageOpacity)
                     .scaleEffect(imageScale)
                     .onAppear {

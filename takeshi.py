@@ -561,8 +561,10 @@ async def startup_event():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, debug=True)
+    import os
 
+    port = int(os.environ.get("PORT", 8080))  # Cloud RunのPORT環境変数を利用
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 # ===========================================       備考欄　　　　　　　==================================================
 # true有効　False無効
