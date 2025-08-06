@@ -555,7 +555,7 @@ async def get_health_data(date: str = Query(..., description="取得する日付
         raise HTTPException(status_code=500, detail=f"サーバーエラー: {str(e)}")
 
 # =========================================🛜アプリケーションの処理＆起動🛜=================================================
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import logging
 import os
 import uvicorn
@@ -569,6 +569,12 @@ async def startup_event():
 @app.get("/")
 def read_root():
     return {"message": "FastAPI is running on Cloud Run!"}
+
+@app.post("/send-data")
+async def send_data(request: Request):
+    data = await request.json()
+    logging.info(f"受信データ: {data}")
+    return {"status": "success", "received": data}
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
