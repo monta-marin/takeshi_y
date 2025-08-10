@@ -1,17 +1,19 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/takeshi-app', '.']
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/takeshi-app']
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args: [
-      'run', 'deploy', 'takeshi-app',
-      '--image', 'gcr.io/$PROJECT_ID/takeshi-app',
-      '--platform', 'managed',
-      '--region', 'asia-northeast1',
-      '--allow-unauthenticated'
-    ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-app', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/my-app']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - 'run'
+    - 'deploy'
+    - 'my-app'                      # Cloud Runサービス名
+    - '--image'
+    - 'gcr.io/$PROJECT_ID/my-app'
+    - '--region'
+    - 'asia-northeast1'             # 東京リージョンなど
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'     # 公開サービスの場合
 
-images:
-  - 'gcr.io/$PROJECT_ID/takeshi-app'

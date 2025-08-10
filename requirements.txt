@@ -1,8 +1,4 @@
 fastapi
 uvicorn[standard]
-scikit-learn
-numpy
-joblib
-requests
 pandas
-aiofiles
+

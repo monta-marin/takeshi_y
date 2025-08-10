@@ -1,14 +1,41 @@
+# Mac関連
 .DS_Store
+
+# Pythonキャッシュ・バイトコード
 __pycache__/
 *.pyc
+
+# モデル・データファイル
 *.pkl
 *.joblib
 *.json
+
+# ログファイル
 *.log
+
+# 圧縮ファイル
 *.zip
+
+# iOS関連
 Pods/
 .idea/
 *.xcodeproj/
 *.xcworkspace/
+
+# 環境ファイル
 .env
+
+# git関連
+.git/
+.gitignore
+
+# 解析結果・出力フォルダ
+results/
+analysis_results/
+
+# IDE・エディタ関連ファイル
+Dockerfile.code-workspace
+
+# 不要なコードフォルダ（必要に応じて）
+takeshi_y/
 

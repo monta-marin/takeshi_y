@@ -1,0 +1,36 @@
+# Pythonキャッシュ
+__pycache__/
+
+# git関連
+.git/
+.gitignore
+
+# Mac関連
+.DS_Store
+
+# iOS関連（Podsなど）
+Pods/
+
+# Python環境
+venv/
+.env/
+.venv/
+
+# ログや結果ファイル
+*.log
+analysis_results/
+results/
+
+# モデルファイル（必要に応じて調整）
+models/
+*.pkl
+*.joblib
+*.json
+
+# エディタ関連
+Dockerfile.code-workspace
+takeshi_y.xcodeproj
+takeshi_y.xcworkspace
+
+
+

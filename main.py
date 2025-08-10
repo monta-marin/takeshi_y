@@ -583,7 +583,7 @@ async def send_data(request: Request):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
-    uvicorn.run("takeshi_y.takeshi:app", host="0.0.0.0", port=port)
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
 
 
 
@@ -593,3 +593,10 @@ if __name__ == "__main__":
 # http://192.168.0.59:8000/healthdata にアクセスすると、実データを使用します。
 
 # 開発用テスト完了後、本番公開用に変更する　「WSGIサーバー」
+
+# ⬇️サーバーからアプリにデータが渡れたか確認できます⬇️
+# http://192.168.0.59:8000/analyze_health_data/estrogen?date=2025-04-   続きの日付を入力
+# http://192.168.0.59:8000/analyze_health_data/cortisol?date=2025-04-　　続きの日付を入力
+# http://192.168.0.59:8000/analyze_health_data/immunity?date=2025-04-  続きの日付を入力
+# http://192.168.0.59:8000/analyze_health_data/calendar?date=2025-04-　 続きの日付を入力
+
