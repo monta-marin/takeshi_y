@@ -1,40 +1,26 @@
-version: 0.2
+name: Trigger AWS CodeBuild
 
-phases:
-  install:
-    runtime-versions:
-      python: 3.11
-    commands:
-      - cd takeshi_y
-      - echo "Upgrading pip..."
-      - pip install --upgrade pip
-      - echo "Installing dependencies from requirements.txt..."
-      - pip install -r requirements.txt
+on:
+  push:
+    branches:
+      - main
 
-  pre_build:
-    commands:
-      - cd takeshi_y
-      - echo "Logging in to Amazon ECR..."
-      - aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 517178430677.dkr.ecr.ap-northeast-1.amazonaws.com
-
+jobs:
   build:
-    commands:
-      - cd takeshi_y
-      - echo "Build started on `date`"
-      - echo "Running main.py..."
-      - python main.py
-      - echo "Building Docker image..."
-      - docker build -t my-fastapi-app .
-      - docker tag my-fastapi-app:latest 517178430677.dkr.ecr.ap-northeast-1.amazonaws.com/my-fastapi-app:latest
+    runs-on: ubuntu-latest
+    steps:
+      # リポジトリをチェックアウト
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  post_build:
-    commands:
-      - cd takeshi_y
-      - echo "Build completed on `date`"
-      - echo "Pushing Docker image..."
-      - docker push 517178430677.dkr.ecr.ap-northeast-1.amazonaws.com/my-fastapi-app:latest
-
-artifacts:
-  files:
-    - '**/*'
+      # AWS CodeBuild を実行
+      - name: Run CodeBuild
+        uses: neovasili/aws-codebuild@v1.1.1
+        with:
+          project-name: takeshi-y-build    # ← 実際の CodeBuild プロジェクト名に変更
+          region: ap-northeast-1
+          wait-for-completion: true
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
