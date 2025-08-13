@@ -5,6 +5,7 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
+      - cd takeshi_y
       - echo "Upgrading pip..."
       - pip install --upgrade pip
       - echo "Installing dependencies from requirements.txt..."
@@ -12,11 +13,13 @@ phases:
 
   pre_build:
     commands:
+      - cd takeshi_y
       - echo "Logging in to Amazon ECR..."
       - aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 517178430677.dkr.ecr.ap-northeast-1.amazonaws.com
 
   build:
     commands:
+      - cd takeshi_y
       - echo "Build started on `date`"
       - echo "Running main.py..."
       - python main.py
@@ -26,6 +29,7 @@ phases:
 
   post_build:
     commands:
+      - cd takeshi_y
       - echo "Build completed on `date`"
       - echo "Pushing Docker image..."
       - docker push 517178430677.dkr.ecr.ap-northeast-1.amazonaws.com/my-fastapi-app:latest

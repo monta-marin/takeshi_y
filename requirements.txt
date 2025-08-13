@@ -1,6 +1,6 @@
 fastapi==0.100.0
 uvicorn[standard]==0.23.0
-pandas==2.0.3   # ここを2.2.0→2.0.3に下げる
+pandas==2.0.3
 numpy
 scikit-learn
 joblib
