@@ -1,24 +1,25 @@
-name: Trigger AWS CodeBuild
+version: 0.2
 
-on:
-  push:
-    branches:
-      - main
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Upgrading pip..."
+      - pip install --upgrade pip
+      - echo "Installing dependencies..."
+      - pip install -r requirements.txt
 
-jobs:
+  pre_build:
+    commands:
+      - echo "Starting build..."
+
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    commands:
+      - echo "Running main.py..."
+      - python main.py
 
-      - name: Run CodeBuild
-        uses: aws-actions/aws-codebuild-run-build@v1
-        with:
-          project-name: takeshi-project   # ← 修正済み
-          region: ap-northeast-1
-          wait-for-completion: true
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+artifacts:
+  files:
+    - '**/*'
 
