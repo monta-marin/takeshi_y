@@ -559,31 +559,81 @@ from fastapi import FastAPI, Request
 import logging
 import uvicorn
 import os
+import asyncio
+import json
+from datetime import datetime
 
+# ----------------- ログ設定 -----------------
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
+# ----------------- FastAPIアプリケーション -----------------
 app = FastAPI()
 
+# ----------------- データ結合・更新処理 -----------------
+COMBINED_DATA_FILE = "combined_data.json"
+
+async def combine_data():
+    """
+    起動時に呼ばれるデータ結合処理。
+    必要に応じて fetch/update 関数を呼ぶことができます。
+    """
+    logging.info("combine_data is running (placeholder)")
+    
+    # 例: combined_data.json がなければ作成
+    try:
+        with open(COMBINED_DATA_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        logging.info(f"{COMBINED_DATA_FILE} が見つかりません。新規作成します。")
+        data = {"health_data": []}
+        with open(COMBINED_DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+    
+    # 実際にここで overwrite_health_data や fetch_and_update_data_from_api を呼ぶことが可能
+    # await overwrite_health_data(new_data) など
+    await asyncio.sleep(0.1)  # プレースホルダー非同期処理
+
+# ----------------- 起動時処理 -----------------
 @app.on_event("startup")
 async def startup_event():
     logging.info("アプリケーションの起動処理が完了！スタートできます！ 🆗")
+    # データ結合処理を呼ぶ
+    await combine_data()
 
+# ----------------- ルートエンドポイント -----------------
 @app.get("/")
 def read_root():
     return {"message": "FastAPI is running on Cloud Run!"}
 
+# ----------------- データ受信エンドポイント -----------------
 @app.post("/send-data")
 async def send_data(request: Request):
     data = await request.json()
     logging.info(f"受信データ: {data}")
+
+    # 受信データを combined_data.json に追記する例
+    try:
+        with open(COMBINED_DATA_FILE, "r", encoding="utf-8") as f:
+            combined = json.load(f)
+    except FileNotFoundError:
+        combined = {"health_data": []}
+
+    # 日付を追加
+    data["date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    combined["health_data"].append(data)
+
+    with open(COMBINED_DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(combined, f, ensure_ascii=False, indent=4)
+
     return {"status": "success", "received": data}
 
+# ----------------- アプリ起動 -----------------
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
-    uvicorn.run("takeshi_y.takeshi:app", host="0.0.0.0", port=port)
+    uvicorn.run("takeshi:app", host="0.0.0.0", port=port)
 
 
 
