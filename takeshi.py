@@ -577,10 +577,9 @@ COMBINED_DATA_FILE = "combined_data.json"
 
 async def combine_data():
     """
-    起動時に呼ばれるデータ結合処理。
-    必要に応じて fetch/update 関数を呼ぶことができます。
+    起動時や単独実行で呼ばれるデータ結合処理。
     """
-    logging.info("combine_data is running (placeholder)")
+    logging.info("combine_data is running...")
     
     try:
         with open(COMBINED_DATA_FILE, "r", encoding="utf-8") as f:
@@ -592,12 +591,14 @@ async def combine_data():
             json.dump(data, f, ensure_ascii=False, indent=4)
 
     await asyncio.sleep(0.1)  # プレースホルダー非同期処理
+    logging.info("combine_data finished.")
 
 # ----------------- 起動時処理 -----------------
 @app.on_event("startup")
 async def startup_event():
-    logging.info("アプリケーションの起動処理が完了！スタートできます！ 🆗")
+    logging.info("アプリケーションの起動処理開始！")
     await combine_data()
+    logging.info("アプリケーションの起動処理完了！スタートできます！ 🆗")
 
 # ----------------- ルートエンドポイント -----------------
 @app.get("/")
@@ -626,16 +627,18 @@ async def send_data(request: Request):
 
 # ----------------- 単独実行用 -----------------
 async def main():
-    # CodeBuild などで combine_data を単独で実行したい場合
+    # CodeBuild などで combine_data を単独で実行
     await combine_data()
 
 if __name__ == "__main__":
-    # CodeBuild でのテスト実行用（非 FastAPI 起動）
     if os.environ.get("RUN_COMBINE_ONLY") == "1":
+        # CodeBuild で単独実行
         asyncio.run(main())
     else:
+        # 通常 FastAPI 起動
         port = int(os.environ.get("PORT", 8080))
         uvicorn.run("takeshi:app", host="0.0.0.0", port=port)
+
 
 
 
