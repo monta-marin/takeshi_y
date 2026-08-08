@@ -1,0 +1,10 @@
+[
+  {
+    "account_id": "user041@example.com",
+    "age": 43,
+    "cortisol_score": 38,
+    "immunity_score": 54,
+    "date": "2026/07/15",
+    "timestamp": "2026-07-15 13:12:34"
+  }
+]
